@@ -57,7 +57,7 @@ export class UserService {
     return await this._userRepository.update(id, user);
   }
 
-  async deleteUser(id: number): Promise<DeleteResult> {
+  async deleteUser(id: number): Promise<UpdateResult> {
     const userExist: User = await this._userRepository.findOne(id, {
       where: { status: 'ACTIVE' },
     });

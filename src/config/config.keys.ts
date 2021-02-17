@@ -1,7 +1,8 @@
 export enum Configuration {
   PORT = 'PORT',
-  HOST = 'localhost',
-  USERNAME = 'nest',
-  PASSWORD = 'app12',
-  DATABASE = 'bookstore',
+  HOST = 'HOST',
+  USERNAME = 'USERNAME',
+  PASSWORD = 'PASSWORD',
+  DATABASE = 'DATABASE',
+  JWT_SECRET = 'JWT_SECRET',
 }
