@@ -20,29 +20,19 @@ export class RoleService {
       throw new BadRequestException('id must be sent');
     }
 
-    const role: Role = await this._roleRepository.findOne(id, {
+    return await this._roleRepository.findOne(id, {
       where: { status: 'ACTIVE' },
     });
-
-    if (!role) {
-      throw new NotFoundException();
-    }
-
-    return role;
   }
 
   async getRoles(): Promise<Role[]> {
-    const roles: Role[] = await this._roleRepository.find({
+    return await this._roleRepository.find({
       where: { status: 'ACTIVE' },
     });
-
-    return roles;
   }
 
   async createRole(role: Role): Promise<Role> {
-    const savedRole: Role = await this._roleRepository.save(role);
-
-    return savedRole;
+    return await this._roleRepository.save(role);
   }
 
   async updateRole(id: number, role: Role): Promise<UpdateResult> {
