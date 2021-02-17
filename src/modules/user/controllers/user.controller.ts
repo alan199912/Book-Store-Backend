@@ -15,12 +15,16 @@ import { UserService } from '../services/user.service';
 import { User } from '../entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
+import { Roles } from '../../role/decorators/role.decorator';
+import { RoleGuard } from '../../role/guards/role.guard';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly _userService: UserService) {}
 
   @Get(':id')
+  @Roles('ADMIN', 'MODERATOR')
+  @UseGuards(AuthGuard(), RoleGuard)
   getUser(
     @Param('id', ParseIntPipe) id: number,
     @Res() response: Response,
