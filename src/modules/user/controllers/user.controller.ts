@@ -21,105 +21,131 @@ export class UserController {
   constructor(private readonly _userService: UserService) {}
 
   @Get(':id')
-  async getUser(
+  getUser(
     @Param('id', ParseIntPipe) id: number,
     @Res() response: Response,
-  ): Promise<void> {
-    return await this._userService
+  ): void {
+    this._userService
       .getUserID(id)
       .then((user: User) => {
-        response.status(HttpStatus.OK).json({
+        if (!user) {
+          throw new Error('The user could not be found');
+        }
+        return response.status(HttpStatus.OK).json({
           status: 'success',
           user,
         });
       })
       .catch((error) => {
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
-          msg: 'Error to get user',
+          msg: error.message,
         });
       });
   }
 
   @UseGuards(AuthGuard())
   @Get()
-  async getUsers(@Res() response: Response): Promise<void> {
-    return await this._userService
+  getUsers(@Res() response: Response): void {
+    this._userService
       .getUsers()
       .then((users: User[]) => {
-        response.status(HttpStatus.OK).json({
+        if (!users) {
+          throw new Error('No users found');
+        }
+
+        return response.status(HttpStatus.OK).json({
           status: 'success',
           users,
         });
       })
       .catch((error) => {
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
-          msg: 'Error to get user',
+          msg: error.message,
         });
       });
   }
 
   @Post()
-  async createUser(
-    @Body() user: User,
-    @Res() response: Response,
-  ): Promise<void> {
-    return await this._userService
+  createUser(@Body() user: User, @Res() response: Response): void {
+    this._userService
       .createUser(user)
       .then((user: User) => {
-        response.status(HttpStatus.CREATED).json({
+        return response.status(HttpStatus.CREATED).json({
           status: 'success',
           user,
         });
       })
       .catch((error) => {
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
-          msg: 'Error to create user',
+          msg: error.message,
         });
       });
   }
 
   @Patch(':id')
-  async updateUser(
+  updateUser(
     @Param('id', ParseIntPipe) id: number,
     @Body() user: User,
     @Res() response: Response,
-  ): Promise<void> {
-    return await this._userService
+  ): void {
+    this._userService
       .updateUser(id, user)
       .then(() => {
-        response.status(HttpStatus.OK).json({
+        return response.status(HttpStatus.OK).json({
           status: 'success',
           msg: 'User update successfully',
         });
       })
       .catch((error) => {
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
-          msg: 'Error to update user',
+          msg: error.message,
         });
       });
   }
 
   @Delete(':id')
-  async deleteUser(
+  deleteUser(
     @Param('id', ParseIntPipe) id: number,
     @Res() response: Response,
-  ): Promise<void> {
-    return await this._userService
+  ): void {
+    this._userService
       .deleteUser(id)
       .then(() => {
-        response.status(HttpStatus.OK).json({
+        return response.status(HttpStatus.OK).json({
           status: 'success',
           msg: 'User delete successfully',
         });
       })
       .catch((error) => {
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
-          msg: 'Error to delete user',
+          msg: error.message,
+        });
+      });
+  }
+
+  @Post('setRole/:userId/:roleId')
+  setRoleToUser(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Param('roleId', ParseIntPipe) roleId: number,
+    @Res() response: Response,
+  ): void {
+    this._userService
+      .setRoleToUser(userId, roleId)
+      .then(() => {
+        return response.status(HttpStatus.OK).json({
+          status: 'success',
+          msg: 'Role added successfully',
+        });
+      })
+      .catch((error) => {
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+          status: 'fail',
+          msg: error.message,
         });
       });
   }

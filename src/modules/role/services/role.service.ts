@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { RoleRepository } from '../repositories/role.repository';
 import { Role } from '../entities/role.entity';
 import { DeleteResult, UpdateResult } from 'typeorm';
-
+import { status } from '../../../shared/entity-status.num';
 @Injectable()
 export class RoleService {
   constructor(
@@ -21,13 +21,13 @@ export class RoleService {
     }
 
     return await this._roleRepository.findOne(id, {
-      where: { status: 'ACTIVE' },
+      where: { status: status.ACTIVE },
     });
   }
 
   async getRoles(): Promise<Role[]> {
     return await this._roleRepository.find({
-      where: { status: 'ACTIVE' },
+      where: { status: status.ACTIVE },
     });
   }
 
@@ -37,7 +37,7 @@ export class RoleService {
 
   async updateRole(id: number, role: Role): Promise<UpdateResult> {
     const roleExist: Role = await this._roleRepository.findOne(id, {
-      where: { status: 'ACTIVE' },
+      where: { status: status.ACTIVE },
     });
 
     if (!roleExist) {
@@ -49,13 +49,13 @@ export class RoleService {
 
   async deleteRole(id: number): Promise<DeleteResult> {
     const roleExist: Role = await this._roleRepository.findOne(id, {
-      where: { status: 'ACTIVE' },
+      where: { status: status.ACTIVE },
     });
 
     if (!roleExist) {
       throw new NotFoundException();
     }
 
-    return await this._roleRepository.update(id, { status: 'INACTIVE' });
+    return await this._roleRepository.update(id, { status: status.INACTIVE });
   }
 }
