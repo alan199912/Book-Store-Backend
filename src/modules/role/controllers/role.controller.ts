@@ -34,7 +34,7 @@ export class RoleController {
       .catch((error) => {
         response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
-          msg: 'Error to get role',
+          msg: error.message,
         });
       });
   }
@@ -52,7 +52,7 @@ export class RoleController {
       .catch((error) => {
         response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
-          msg: 'Error to get roles',
+          msg: error.message,
         });
       });
   }
@@ -73,7 +73,7 @@ export class RoleController {
       .catch((error) => {
         response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
-          msg: 'Error to create role',
+          msg: error.message,
         });
       });
   }
@@ -95,7 +95,7 @@ export class RoleController {
       .catch((error) => {
         response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
-          msg: 'Error to update role',
+          msg: error.message,
         });
       });
   }
@@ -116,7 +116,7 @@ export class RoleController {
       .catch((error) => {
         response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
-          msg: 'Error to delete roles',
+          msg: error.message,
         });
       });
   }

@@ -14,17 +14,18 @@ import {
 import { UserService } from '../services/user.service';
 import { User } from '../entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { RoleGuard } from '../../role/guards/role.guard';
 import { Response } from 'express';
 import { Roles } from '../../role/decorators/role.decorator';
-import { RoleGuard } from '../../role/guards/role.guard';
+import { RoleType } from '../../role/roletype.enum';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly _userService: UserService) {}
 
-  @Get(':id')
-  @Roles('ADMIN', 'MODERATOR')
+  @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
   @UseGuards(AuthGuard(), RoleGuard)
+  @Get(':id')
   getUser(
     @Param('id', ParseIntPipe) id: number,
     @Res() response: Response,
@@ -48,7 +49,8 @@ export class UserController {
       });
   }
 
-  @UseGuards(AuthGuard())
+  @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
+  @UseGuards(AuthGuard(), RoleGuard)
   @Get()
   getUsers(@Res() response: Response): void {
     this._userService
@@ -71,6 +73,8 @@ export class UserController {
       });
   }
 
+  @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
+  @UseGuards(AuthGuard(), RoleGuard)
   @Post()
   createUser(@Body() user: User, @Res() response: Response): void {
     this._userService
@@ -89,6 +93,8 @@ export class UserController {
       });
   }
 
+  @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
+  @UseGuards(AuthGuard(), RoleGuard)
   @Patch(':id')
   updateUser(
     @Param('id', ParseIntPipe) id: number,
@@ -111,6 +117,8 @@ export class UserController {
       });
   }
 
+  @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
+  @UseGuards(AuthGuard(), RoleGuard)
   @Delete(':id')
   deleteUser(
     @Param('id', ParseIntPipe) id: number,
@@ -132,6 +140,8 @@ export class UserController {
       });
   }
 
+  @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
+  @UseGuards(AuthGuard(), RoleGuard)
   @Post('setRole/:userId/:roleId')
   setRoleToUser(
     @Param('userId', ParseIntPipe) userId: number,
