@@ -18,6 +18,7 @@ import { RoleGuard } from '../../role/guards/role.guard';
 import { Response } from 'express';
 import { Roles } from '../../role/decorators/role.decorator';
 import { RoleType } from '../../role/roletype.enum';
+import { updateUserDto } from '../dto/update-user.dto';
 
 @Controller('users')
 export class UserController {
@@ -73,32 +74,32 @@ export class UserController {
       });
   }
 
-  @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
-  @UseGuards(AuthGuard(), RoleGuard)
-  @Post()
-  createUser(@Body() user: User, @Res() response: Response): void {
-    this._userService
-      .createUser(user)
-      .then((user: User) => {
-        return response.status(HttpStatus.CREATED).json({
-          status: 'success',
-          user,
-        });
-      })
-      .catch((error) => {
-        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-          status: 'fail',
-          msg: error.message,
-        });
-      });
-  }
+  // @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
+  // @UseGuards(AuthGuard(), RoleGuard)
+  // @Post()
+  // createUser(@Body() user: User, @Res() response: Response): void {
+  //   this._userService
+  //     .createUser(user)
+  //     .then((user: User) => {
+  //       return response.status(HttpStatus.CREATED).json({
+  //         status: 'success',
+  //         user,
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+  //         status: 'fail',
+  //         msg: error.message,
+  //       });
+  //     });
+  // }
 
   @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
   @UseGuards(AuthGuard(), RoleGuard)
   @Patch(':id')
   updateUser(
     @Param('id', ParseIntPipe) id: number,
-    @Body() user: User,
+    @Body() user: updateUserDto,
     @Res() response: Response,
   ): void {
     this._userService

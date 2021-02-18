@@ -11,28 +11,29 @@ import {
   Res,
 } from '@nestjs/common';
 import { RoleService } from '../services/role.service';
-import { Role } from '../entities/role.entity';
 import { Response } from 'express';
+import { ReadRoleDto } from '../dto/read-role.dto';
+import { CreateRoleDto } from '../dto/create-role.dto';
 
 @Controller('roles')
 export class RoleController {
   constructor(private readonly _roleService: RoleService) {}
 
   @Get(':id')
-  async getRole(
+  getRole(
     @Param('id', ParseIntPipe) id: number,
     @Res() response: Response,
-  ): Promise<void> {
-    return await this._roleService
+  ): void {
+    this._roleService
       .getRoleID(id)
-      .then((role: Role) => {
-        response.status(HttpStatus.OK).json({
+      .then((role: ReadRoleDto) => {
+        return response.status(HttpStatus.OK).json({
           status: 'success',
           role,
         });
       })
       .catch((error) => {
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
           msg: error.message,
         });
@@ -40,17 +41,17 @@ export class RoleController {
   }
 
   @Get()
-  async getRoles(@Res() response: Response): Promise<void> {
-    return await this._roleService
+  getRoles(@Res() response: Response): void {
+    this._roleService
       .getRoles()
-      .then((roles: Role[]) => {
-        response.status(HttpStatus.OK).json({
+      .then((roles: ReadRoleDto[]) => {
+        return response.status(HttpStatus.OK).json({
           status: 'success',
           roles,
         });
       })
       .catch((error) => {
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
           msg: error.message,
         });
@@ -58,20 +59,20 @@ export class RoleController {
   }
 
   @Post()
-  async createRole(
-    @Body() role: Role,
+  createRole(
+    @Body() role: Partial<CreateRoleDto>,
     @Res() response: Response,
-  ): Promise<void> {
-    return await this._roleService
+  ): void {
+    this._roleService
       .createRole(role)
-      .then((role: Role) => {
-        response.status(HttpStatus.OK).json({
+      .then((role: ReadRoleDto) => {
+        return response.status(HttpStatus.OK).json({
           status: 'success',
           role,
         });
       })
       .catch((error) => {
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
           msg: error.message,
         });
@@ -79,21 +80,21 @@ export class RoleController {
   }
 
   @Patch(':id')
-  async updateRole(
+  updateRole(
     @Param('id', ParseIntPipe) id: number,
-    @Body() role: Role,
+    @Body() role: ReadRoleDto,
     @Res() response: Response,
-  ): Promise<void> {
-    return await this._roleService
+  ): void {
+    this._roleService
       .updateRole(id, role)
       .then(() => {
-        response.status(HttpStatus.OK).json({
+        return response.status(HttpStatus.OK).json({
           status: 'success',
           msg: 'Role update successfully',
         });
       })
       .catch((error) => {
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
           msg: error.message,
         });
@@ -101,20 +102,20 @@ export class RoleController {
   }
 
   @Delete(':id')
-  async deleteRole(
+  deleteRole(
     @Param('id', ParseIntPipe) id: number,
     @Res() response: Response,
-  ): Promise<void> {
-    return await this._roleService
+  ): void {
+    this._roleService
       .deleteRole(id)
       .then(() => {
-        response.status(HttpStatus.OK).json({
+        return response.status(HttpStatus.OK).json({
           status: 'success',
           msg: 'Role delete successfully',
         });
       })
       .catch((error) => {
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
           msg: error.message,
         });
