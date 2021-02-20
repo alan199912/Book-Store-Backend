@@ -24,7 +24,7 @@ import { updateUserDto } from '../dto/update-user.dto';
 export class UserController {
   constructor(private readonly _userService: UserService) {}
 
-  @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
+  @Roles(RoleType.ADMIN)
   @UseGuards(AuthGuard(), RoleGuard)
   @Get(':id')
   getUser(
@@ -50,7 +50,7 @@ export class UserController {
       });
   }
 
-  @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
+  @Roles(RoleType.ADMIN)
   @UseGuards(AuthGuard(), RoleGuard)
   @Get()
   getUsers(@Res() response: Response): void {
@@ -118,7 +118,7 @@ export class UserController {
       });
   }
 
-  @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
+  @Roles(RoleType.ADMIN)
   @UseGuards(AuthGuard(), RoleGuard)
   @Delete(':id')
   deleteUser(
@@ -141,7 +141,7 @@ export class UserController {
       });
   }
 
-  @Roles(RoleType.ADMIN, RoleType.ADMINISTRATOR)
+  @Roles(RoleType.ADMIN)
   @UseGuards(AuthGuard(), RoleGuard)
   @Post('setRole/:userId/:roleId')
   setRoleToUser(

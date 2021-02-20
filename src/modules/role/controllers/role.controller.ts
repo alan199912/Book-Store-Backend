@@ -9,16 +9,19 @@ import {
   Patch,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { RoleService } from '../services/role.service';
 import { Response } from 'express';
 import { ReadRoleDto } from '../dto/read-role.dto';
 import { CreateRoleDto } from '../dto/create-role.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('roles')
 export class RoleController {
   constructor(private readonly _roleService: RoleService) {}
 
+  @UseGuards(AuthGuard())
   @Get(':id')
   getRole(
     @Param('id', ParseIntPipe) id: number,
@@ -40,6 +43,7 @@ export class RoleController {
       });
   }
 
+  @UseGuards(AuthGuard())
   @Get()
   getRoles(@Res() response: Response): void {
     this._roleService
@@ -58,6 +62,7 @@ export class RoleController {
       });
   }
 
+  @UseGuards(AuthGuard())
   @Post()
   createRole(
     @Body() role: Partial<CreateRoleDto>,
@@ -79,6 +84,7 @@ export class RoleController {
       });
   }
 
+  @UseGuards(AuthGuard())
   @Patch(':id')
   updateRole(
     @Param('id', ParseIntPipe) id: number,
@@ -101,6 +107,7 @@ export class RoleController {
       });
   }
 
+  @UseGuards(AuthGuard())
   @Delete(':id')
   deleteRole(
     @Param('id', ParseIntPipe) id: number,

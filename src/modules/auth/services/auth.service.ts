@@ -15,6 +15,8 @@ import { User } from '../../user/entities/user.entity';
 import { compare } from 'bcryptjs';
 import { IJwtPayload } from '../interfaces/jwt-payload.interface';
 import { RoleType } from '../../role/roletype.enum';
+import { plainToClass } from 'class-transformer';
+import { LoggedInDto } from '../dto/logged-in.dto';
 
 @Injectable()
 export class AuthService {
@@ -38,7 +40,7 @@ export class AuthService {
     return this._authRepository.sigup(signupDto);
   }
 
-  async signin(signinDto: SigninDto): Promise<{ token: string }> {
+  async signin(signinDto: SigninDto): Promise<LoggedInDto> {
     const { username, password } = signinDto;
 
     const user: User = await this._authRepository.findOne({
@@ -64,6 +66,6 @@ export class AuthService {
 
     const token = this._jwtService.sign(payload);
 
-    return { token };
+    return plainToClass(LoggedInDto, { token, user });
   }
 }

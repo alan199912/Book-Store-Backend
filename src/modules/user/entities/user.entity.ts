@@ -13,6 +13,7 @@ import {
 import { UserDetails } from './user.details.entity';
 import { Role } from '../../role/entities/role.entity';
 import { status } from '../../../shared/entity-status.num';
+import { Book } from '../../book/entities/book.entity';
 @Entity('users')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn('increment')
@@ -38,6 +39,10 @@ export class User extends BaseEntity {
   @ManyToMany((type) => Role, (role) => role.users, { eager: true })
   @JoinTable({ name: 'user_roles' })
   roles: Role[];
+
+  @ManyToMany((type) => Book, (book) => book.authors)
+  @JoinTable({ name: 'user_books' })
+  books: Book[];
 
   @Column({ type: 'varchar', default: status.ACTIVE, length: 8 })
   status: string;

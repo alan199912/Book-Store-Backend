@@ -19,45 +19,39 @@ export class AuthController {
 
   @Post('/signup')
   @UsePipes(ValidationPipe) // * ensures that validations are met
-  async signup(
-    @Body() signupDto: SignupDto,
-    @Res() response: Response,
-  ): Promise<void> {
-    return await this._authService
+  signup(@Body() signupDto: SignupDto, @Res() response: Response): void {
+    this._authService
       .signup(signupDto)
       .then(() => {
-        response.status(HttpStatus.OK).json({
+        return response.status(HttpStatus.OK).json({
           status: 'success',
           msg: 'Sign up successfully',
         });
       })
       .catch((error) => {
         console.log(error);
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
-          msg: 'Username or email already exists',
+          msg: error.message,
         });
       });
   }
 
   @Post('/signin')
   @UsePipes(ValidationPipe)
-  async signin(
-    @Body() signinDto: SigninDto,
-    @Res() response: Response,
-  ): Promise<void> {
-    return await this._authService
+  signin(@Body() signinDto: SigninDto, @Res() response: Response): void {
+    this._authService
       .signin(signinDto)
       .then((token) => {
-        response.status(HttpStatus.OK).json({
+        return response.status(HttpStatus.OK).json({
           status: 'success',
           token,
         });
       })
       .catch((error) => {
-        response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
+        return response.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
           status: 'fail',
-          msg: 'Error to sign in',
+          msg: error.message,
         });
       });
   }
